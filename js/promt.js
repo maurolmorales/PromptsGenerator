@@ -8,7 +8,7 @@ export default function (data) {
     "#LandscapeAccurateFrame"
   );
   const ArtistsFrame = document.querySelector("#ArtistsFrame");
-  const filterArtist= document.querySelector("#filterArtist")
+  const filterArtist = document.querySelector("#filterArtist");
   const CameraFrame = document.querySelector("#CameraFrame");
   const AdditionalFrame = document.querySelector("#AdditionalFrame");
   const inputFinalPromt = document.querySelector("#finalPromt");
@@ -51,7 +51,7 @@ export default function (data) {
           }
           input.value = e;
           let label = document.createElement("label");
-          label.classList.add("labelArtist")
+          label.classList.add("labelSelect");
           label.innerHTML = e;
           label.appendChild(input);
           divBox.appendChild(label);
@@ -272,22 +272,20 @@ export default function (data) {
     navigator.clipboard.writeText(varP);
     tooltipCopy(body);
   });
-  
-  filterArtist.addEventListener("input", ()=>{
+
+  filterArtist.addEventListener("input", () => {
     let varP = filterArtist.value.toLowerCase().trim();
-    
-    document.querySelectorAll(".labelArtist").forEach((a) => {
-      let elementA = a.textContent.toLocaleLowerCase()
 
-      if(elementA.includes(varP)){
-        a.style.display = "flex"
-      }else{
-        a.style.display = "none"
+    document.querySelectorAll("#ArtistsFrame .wrapCheck .labelSelect").forEach((a) => {
+      let elementA = a.textContent.toLocaleLowerCase();
+
+      if (elementA.includes(varP)) {
+        a.style.display = "flex";
+      } else {
+        a.style.display = "none";
       }
-    })
-
-  })
-
+    });
+  });
 
   generarSelect(data.Scene, SceneFrame);
   generarSelect(data.Subject, SubjectFrame);
