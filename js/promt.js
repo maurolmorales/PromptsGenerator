@@ -275,16 +275,19 @@ export default function (data) {
 
   filterArtist.addEventListener("input", () => {
     let varP = filterArtist.value.toLowerCase().trim();
-
-    document.querySelectorAll("#ArtistsFrame .wrapCheck .labelSelect").forEach((a) => {
-      let elementA = a.textContent.toLocaleLowerCase();
-
-      if (elementA.includes(varP)) {
-        a.style.display = "flex";
-      } else {
-        a.style.display = "none";
-      }
-    });
+    let varPFiltrado = varP.split(" ");
+    document
+      .querySelectorAll("#ArtistsFrame .wrapCheck .labelSelect")
+      .forEach((a) => {
+        let elementA = a.textContent.toLocaleLowerCase();
+        let todasLasPalabras = varPFiltrado.every((palabra)=>elementA.includes(palabra))
+        // if (elementA.includes(varP)) {
+          if (todasLasPalabras) {
+          a.style.display = "flex";
+        } else {
+          a.style.display = "none";
+        }
+      });
   });
 
   generarSelect(data.Scene, SceneFrame);

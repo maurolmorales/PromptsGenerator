@@ -57,7 +57,7 @@ document.querySelector("#app").innerHTML = `
             type="text"
             id="filterArtist"
             class="positivePromt"
-            placeholder="-- Filter --"
+            placeholder="word word ..."
           />
         </div>
       <article id="ArtistsFrame">

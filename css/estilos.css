@@ -78,19 +78,21 @@ q:after {
   content: none;
 }
 
-::-moz-selection {
+::selection {
   background-color: var(--negro);
   color: var(--blanco);
 }
-::selection {
+::-moz-selection {
   background-color: var(--negro);
   color: var(--blanco);
 }
 
 ::-webkit-scrollbar {
   width: 2rem;
+  height: 100%;
   background-image: transparent;
 }
+
 ::-webkit-scrollbar-track {
   background-color: transparent;
 }
@@ -99,6 +101,7 @@ q:after {
   border-radius: 1rem;
   box-shadow: inset -2px -2px 2px dimgray, inset 2px 2px 2px rgb(171, 156, 156);
 }
+
 ::-webkit-scrollbar-thumb:hover {
   background: #555;
 }
@@ -118,6 +121,7 @@ html {
   width: 100%;
 }
 body {
+  scrollbar-width: thin;
   min-height: 100vh;
   font-size: 100%;
   font-family: var(--tipo-principal);
@@ -155,6 +159,23 @@ h2 {
   font-size: 2.5rem;
   font-weight: bold;
 }
+
+h2::after,
+h2::before {
+  content: "";
+  height: 2rem;
+  width: 10rem;
+}
+
+h2::after {
+  margin-left: 1rem;
+  background-image: linear-gradient(to right, white, transparent);
+}
+h2::before {
+  margin-right: 1rem;
+  background-image: linear-gradient(to left, white, transparent);
+}
+
 /* h3{} */
 /* h4{} */
 /* h5{} */
@@ -519,6 +540,7 @@ article {
 /* param{} */
 /* ------------------------------    class & ID's      --------------------------------- */
 #ArtistsFrame {
+  background-color: transparent;
   width: 100%;
   height: 30rem;
   display: flex;
