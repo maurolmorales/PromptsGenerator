@@ -259,6 +259,7 @@ input[type="text"] {
 }
 
 .wrapCheck {
+  grid-column: 1/-1;
   width: 100%;
   height: auto;
   display: grid;

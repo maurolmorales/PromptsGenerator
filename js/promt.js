@@ -33,7 +33,6 @@ export default function (data) {
   const generarSelect = (data, destino) => {
     let indice = data;
     let classBefore = plantillas.querySelector("select").className;
-
     for (const i in indice) {
       if (indice[i].multiple) {
         let divBox = document.createElement("div");
@@ -41,7 +40,7 @@ export default function (data) {
         indice[i].data.forEach((e) => {
           let input = document.createElement("input");
           input.type = "checkbox";
-          input.classList.add("boxes");
+          input.classList.add(`boxes`);
           if (indice.Person_negative_Promt) {
             input.classList.add(destino.id, "negativePromt");
             input.checked = true;
@@ -96,6 +95,7 @@ export default function (data) {
           return data.value;
         }
       } else {
+        console.log("null");
         return null;
       }
     };
@@ -126,35 +126,59 @@ export default function (data) {
           order += prov;
         }
       }
+
       function SubjectFrame() {
-        let temp = "";
+        let temporal = "",
+          temporalAccesories = "",
+          s_temp = "";
 
         document.querySelectorAll(".SubjectFrame").forEach((s) => {
-          let s_temp = verifInput(s);
-          const DEFAULT = `${s_temp} `;
-          const CASES = {
-            Dress_Code: `wearing ${s_temp} `,
-            Acction: `while ${s_temp} `,
-            Pose: verifVowel(String(s_temp))
-              ? `in an ${s_temp} `
-              : `in a ${s_temp} `,
-            Vehicle: verifVowel(String(s_temp))
-              ? `an ${s_temp} `
-              : `a ${s_temp} `,
-          };
-          if (s_temp) {
-            temp += CASES[s.id] || DEFAULT;
+          if (verifInput(s)) {
+            s_temp = verifInput(s);
+            const DEFAULT = function () {
+              temporal += `def: ${s_temp} `;
+            };
+            const CASES = {
+              Dress_Code: function () {temporal += `wearing ${s_temp} ` },
+              Acction: function () {temporal += `while ${s_temp} `},
+              Pose: function () { verifVowel(String(s_temp))
+                  ? (temporal += `in an ${s_temp} `)
+                  : (temporal += `in a ${s_temp} `) },
+              Vehicle: function () { verifVowel(String(s_temp))
+                  ? (temporal += `an ${s_temp} `)
+                  : (temporal += `a ${s_temp} `)},
+              Accessories: function () { 
+
+                temporalAccesories += s_temp;
+                console.log( "ok" )
+              }
+            };
+
+           //CASES[s.id]()
+            console.log( s.name )
+            // Accessories: function(){temporalAccesories += s_temp},
+            //  temporal += CASES[s.id] || DEFAULT
           }
         });
-        if (temp) {
-          order += `${temp.trim()}, `;
+
+        // if (temporalAccesories) { temporal += `wearing ${temporalAccesories}` }
+        if (temporal) {
+          order += `${temporal.trim()}, `;
         }
       }
+
       function SpecificAspectsFrame() {
         let temp = "";
         document.querySelectorAll(".SpecificAspectsFrame").forEach((s) => {
-          if (s.value) {
-            temp += `${verifInput(s)} `;
+          /* */
+          let s_temp = verifInput(s);
+          const DEFAULT = `${s_temp} `;
+          const CASES = {
+            Haircut: `${s_temp} haircut `,
+          };
+          /* */
+          if (s_temp) {
+            temp += CASES[s.id] || DEFAULT;
           }
         });
         if (temp) {
@@ -280,9 +304,11 @@ export default function (data) {
       .querySelectorAll("#ArtistsFrame .wrapCheck .labelSelect")
       .forEach((a) => {
         let elementA = a.textContent.toLocaleLowerCase();
-        let todasLasPalabras = varPFiltrado.every((palabra)=>elementA.includes(palabra))
+        let todasLasPalabras = varPFiltrado.every((palabra) =>
+          elementA.includes(palabra)
+        );
         // if (elementA.includes(varP)) {
-          if (todasLasPalabras) {
+        if (todasLasPalabras) {
           a.style.display = "flex";
         } else {
           a.style.display = "none";
@@ -291,7 +317,7 @@ export default function (data) {
   });
 
   generarSelect(data.Scene, SceneFrame);
-  generarSelect(data.Subject, SubjectFrame);
+  generarSelect(data.Subject, SubjectFrame, Object.keys(data.Subject));
   generarSelect(data.Specific_Aspects, Specific_AspectsFrame);
   generarSelect(data.Background, BackgroundFrame);
   generarSelect(data.LandscapeAccurate, LandscapeAccurateFrame);
