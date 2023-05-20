@@ -6,8 +6,8 @@ import promptJS from "./js/promt.js";
 document.querySelector("#app").innerHTML = `
   <header>
     <h1>
-      <p>Prompts</p>
-      <p>Generator</p>
+      Prompts
+      Generator
     </h1>
     <div>
       <img

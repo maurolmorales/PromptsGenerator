@@ -21,27 +21,21 @@ export default function (data) {
   const plantillas = document.querySelector("#plantilla").content;
   const fragment = document.createDocumentFragment();
 
-  const tooltipCopy = (imputObject) => {
-    imputObject.classList.add("tooltipCopy");
-    console.log("inicio");
-    setTimeout(() => {
-      console.log("fin");
-      imputObject.classList.remove("tooltipCopy");
-    }, 2500);
-  };
-
-  const generarSelect = (data, destino) => {
-    let indice = data;
+  const generarSelect = (category, destino) => {
+    let var_category = data[category];
     let classBefore = plantillas.querySelector("select").className;
-    for (const i in indice) {
-      if (indice[i].multiple) {
+
+    for (const i in var_category) {
+      if (var_category[i].multiple) {
         let divBox = document.createElement("div");
         divBox.classList.add("wrapCheck");
-        indice[i].data.forEach((e) => {
+
+        var_category[i].data.forEach((e) => {
           let input = document.createElement("input");
           input.type = "checkbox";
-          input.classList.add(`boxes`);
-          if (indice.Person_negative_Promt) {
+          input.classList.add("boxes"); 
+          input.setAttribute( "name", i); /*----- Sub Categories  ---------- */
+          if (var_category.Person_negative_Promt) {
             input.classList.add(destino.id, "negativePromt");
             input.checked = true;
           } else {
@@ -59,7 +53,7 @@ export default function (data) {
       } else {
         plantillas.querySelector("label").for = i;
         plantillas.querySelector("label").innerText = i.replaceAll("_", " ");
-        plantillas.querySelector("select").name = i;
+        plantillas.querySelector("select").name = i; 
         plantillas.querySelector("select").id = i;
         plantillas
           .querySelector("select")
@@ -68,7 +62,7 @@ export default function (data) {
 
         const option = document.createElement("option");
         plantillas.querySelector("select").appendChild(option);
-        indice[i].data.forEach((e) => {
+        var_category[i].data.forEach((e) => {
           const option = document.createElement("option");
           option.value = e;
           option.innerText = e;
@@ -91,7 +85,7 @@ export default function (data) {
         if (data.type === "select-one" && data.value && !data.value == "") {
           return data.value;
         }
-        if (data.type === "checkbox" && data.checked) {
+        if (data.type === "checkbox" && data.checked === true) {
           return data.value;
         }
       } else {
@@ -133,38 +127,40 @@ export default function (data) {
           s_temp = "";
 
         document.querySelectorAll(".SubjectFrame").forEach((s) => {
-          if (verifInput(s)) {
-            s_temp = verifInput(s);
-            const DEFAULT = function () {
-              temporal += `def: ${s_temp} `;
-            };
-            const CASES = {
-              Dress_Code: function () {temporal += `wearing ${s_temp} ` },
-              Acction: function () {temporal += `while ${s_temp} `},
-              Pose: function () { verifVowel(String(s_temp))
+          s_temp = verifInput(s);
+          if (s_temp) {
+            switch (s.name) {
+              case "Dress_Code":
+                temporal += `wearing ${s_temp} `;
+                break;
+              case "Acction":
+                temporal += `while ${s_temp} `;
+                break;
+              case "Pose":
+                verifVowel(String(s_temp))
                   ? (temporal += `in an ${s_temp} `)
-                  : (temporal += `in a ${s_temp} `) },
-              Vehicle: function () { verifVowel(String(s_temp))
+                  : (temporal += `in a ${s_temp} `);
+                break;
+              case "Vehicle":
+                verifVowel(String(s_temp))
                   ? (temporal += `an ${s_temp} `)
-                  : (temporal += `a ${s_temp} `)},
-              Accessories: function () { 
-
-                temporalAccesories += s_temp;
-                console.log( "ok" )
-              }
-            };
-
-           //CASES[s.id]()
-            console.log( s.name )
-            // Accessories: function(){temporalAccesories += s_temp},
-            //  temporal += CASES[s.id] || DEFAULT
+                  : (temporal += `a ${s_temp} `);
+                break;
+              case "Accessories":
+                temporalAccesories += `${s_temp} `;
+                break;
+              default:
+                temporal += `${s_temp} `;
+                break;
+            }
           }
         });
 
-        // if (temporalAccesories) { temporal += `wearing ${temporalAccesories}` }
-        if (temporal) {
-          order += `${temporal.trim()}, `;
-        }
+        if (temporal.includes("wearing")) {
+          if(temporalAccesories != ""){temporal += `and ${temporalAccesories}`}
+        }else {
+          if(temporalAccesories != ""){(temporal += `wearing ${temporalAccesories}`) }}
+        if (temporal) { order += `${temporal.trim()}, `}
       }
 
       function SpecificAspectsFrame() {
@@ -280,6 +276,15 @@ export default function (data) {
     return temp_negative;
   };
 
+  const tooltipCopy = (imputObject) => {
+    imputObject.classList.add("tooltipCopy");
+    console.log("inicio");
+    setTimeout(() => {
+      console.log("fin");
+      imputObject.classList.remove("tooltipCopy");
+    }, 2500);
+  };
+
   document.addEventListener("change", () => {
     inputFinalPromt.value = barridoPositivePromt();
     inputFinalPromtNegative.value = barridoNegativePromt();
@@ -316,13 +321,13 @@ export default function (data) {
       });
   });
 
-  generarSelect(data.Scene, SceneFrame);
-  generarSelect(data.Subject, SubjectFrame, Object.keys(data.Subject));
-  generarSelect(data.Specific_Aspects, Specific_AspectsFrame);
-  generarSelect(data.Background, BackgroundFrame);
-  generarSelect(data.LandscapeAccurate, LandscapeAccurateFrame);
-  generarSelect(data.Artists, ArtistsFrame);
-  generarSelect(data.Camera, CameraFrame);
-  generarSelect(data.Additional, AdditionalFrame);
-  generarSelect(data.Negative_Promt, negativeInput);
+  generarSelect("Scene", SceneFrame);
+  generarSelect("Subject", SubjectFrame);
+  generarSelect("Specific_Aspects", Specific_AspectsFrame);
+  generarSelect("Background", BackgroundFrame);
+  generarSelect("LandscapeAccurate", LandscapeAccurateFrame);
+  generarSelect("Artists", ArtistsFrame);
+  generarSelect("Camera", CameraFrame);
+  generarSelect("Additional", AdditionalFrame);
+  generarSelect("Negative_Promt", negativeInput);
 }
